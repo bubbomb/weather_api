@@ -1,4 +1,6 @@
 import requests
+import os
+import logging
 
 from flask import Flask
 from flask import request
@@ -31,7 +33,12 @@ def create_app():
 app = create_app()
 
 def get_weather_data_response(lat, lon):
-    open_weather_data, status_code = request_open_weather_data(lat, lon, '1234')
+    api_key = os.environ.get('WEATHER_API_KEY')
+    if not api_key:
+        logging.error('WEATHER_API_KEY not implemented correctly, refer to documentation to set up.')
+        return {}, 501
+
+    open_weather_data, status_code = request_open_weather_data(lat, lon, api_key)
 
     condition = open_weather_data['weather'][0]['description']
     temperature = get_temperature(open_weather_data['main']['feels_like'])
