@@ -1,4 +1,5 @@
 import pytest
+import json
 from app import create_app
 
 @pytest.fixture()
@@ -25,24 +26,23 @@ def test_default_route(client):
     assert b"welcome to the weather API, use the /weather endpoint for weather data" in response.data
 
 def test_needs_lat(client):
-    response = client.get("/weather?long=1")
-    print(response.__dict__)
+    response = client.get("/weather?lon=1")
     assert response.status_code == 400
     assert b'missing lat parameter' in response.data
 
 def test_needs_long(client):
     response = client.get("/weather?lat=1")
-    print(response.__dict__)
     assert response.status_code == 400
     assert b'missing lon parameter' in response.data
 
 def test_missing_both(client):
     response = client.get("/weather")
-    print(response.__dict__)
     assert response.status_code == 400
     assert b'missing lon and lat parameters' in response.data
 
 def test_has_lat_and_long(client):
-    response = client.get("/weather?lat=1&long=2")
-    print(response.__dict__)
+    response = client.get("/weather?lat=1&lon=2")
     assert response.status_code == 200
+    response_dict = json.loads(response.data.decode('utf-8') or '{}')
+    assert response_dict.get('condition', '') == 'clear sky'
+    assert response_dict.get('temperature', '') == 'cold'
