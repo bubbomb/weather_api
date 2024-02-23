@@ -1,6 +1,10 @@
+import requests
+
 from flask import Flask
 from flask import request
 
+
+WEATHER_URL_PATTERN = 'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial'
 
 def create_app():
     app = Flask(__name__)
@@ -27,12 +31,28 @@ def create_app():
 app = create_app()
 
 def get_weather_data_response(lat, lon):
-    weather_data ={
-        'condition': 'clear sky',
-        'temperature': 'cold',
+    open_weather_data, status_code = request_open_weather_data(lat, lon, '1234')
+
+    condition = open_weather_data['weather'][0]['description']
+    temperature = get_temperature(open_weather_data['main']['feels_like'])
+    weather_data = {
+        'condition':condition,
+        'temperature': temperature,
     }
-    status_code = 200
+
     return weather_data, status_code
 
+def get_temperature(feels_like):
+    if feels_like >= 90:
+        return 'hot'
+    elif feels_like >= 60:
+        return 'moderate'
+    return 'cold'
 
-#https://api.openweathermap.org/data/2.5/weather?lat=40.363918&lon=-111.738869&appid=c22bc649b8f42935ff334297e177edc5
+def request_open_weather_data(lat, lon, api_key):
+    weather_url = WEATHER_URL_PATTERN.format(lat=lat, lon=lon, api_key=api_key)
+
+    results = requests.get(weather_url)
+    json = results.json()
+    print(json)
+    return json, results.status_code
