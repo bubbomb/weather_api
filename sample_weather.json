@@ -1,0 +1,43 @@
+{
+    "coord": {
+        "lon": -111.7389,
+        "lat": 40.3639
+    },
+    "weather": [
+        {
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 276.28,
+        "feels_like": 272.64,
+        "temp_min": 274.81,
+        "temp_max": 278.96,
+        "pressure": 1031,
+        "humidity": 71
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 4.12,
+        "deg": 170
+    },
+    "clouds": {
+        "all": 0
+    },
+    "dt": 1708706479,
+    "sys": {
+        "type": 2,
+        "id": 2086221,
+        "country": "US",
+        "sunrise": 1708697416,
+        "sunset": 1708737048
+    },
+    "timezone": -25200,
+    "id": 5779816,
+    "name": "Pleasant Grove",
+    "cod": 200
+}
